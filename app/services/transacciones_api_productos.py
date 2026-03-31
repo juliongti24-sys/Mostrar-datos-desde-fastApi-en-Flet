@@ -1,60 +1,55 @@
-from typing import List, Dict
+import requests
 
-# Base de datos simulada para que si funcione y muestre 
-productos = [
-    {
-        "id": 1,
-        "nombre": "Laptop",
-        "cantidad": 10,
-        "ingreso": "2024-01-10",
-        "min": 5,
-        "max": 20
-    },
-    {
-        "id": 2,
-        "nombre": "Mouse",
-        "cantidad": 30,
-        "ingreso": "2024-01-11",
-        "min": 10,
-        "max": 50
-    }
-]
-
+# URL de tu backend en FastAPI
+BASE_URL = "http://localhost:8000/productos"
 
 # LISTAR PRODUCTOS
-def list_products() -> List[Dict]:
-    return productos
+def list_products(limit: int = 100, offset: int = 0):
+    try:
+        response = requests.get(f"{BASE_URL}/?limit={limit}&offset={offset}")
+        response.raise_for_status()
+        return response.json() 
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión al listar: {e}")
+        return {"items": [], "total": 0}
 
-
-# OBTENER PRODUCTO POR ID
-def get_product(product_id: int) -> Dict | None:
-    for p in productos:
-        if p["id"] == product_id:
-            return p
-    return None
-
+# OBTENER UN PRODUCTO POR ID
+def get_product(product_id: str):
+    try:
+        response = requests.get(f"{BASE_URL}/{product_id}")
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        raise Exception(f"Error al obtener el producto: {e}")
 
 # CREAR PRODUCTO
-def create_product(producto: Dict) -> Dict:
-    nuevo_id = max(p["id"] for p in productos) + 1 if productos else 1
-    producto["id"] = nuevo_id
-    productos.append(producto)
-    return producto
-
+def create_product(producto: dict):
+    try:
+        response = requests.post(f"{BASE_URL}/", json=producto)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as err:
+        raise Exception(f"Error del servidor: {err.response.text}")
+    except Exception as e:
+        raise Exception(f"Error al conectar con la API: {e}")
 
 # ACTUALIZAR PRODUCTO
-def update_product(product_id: int, datos: Dict) -> Dict | None:
-    for p in productos:
-        if p["id"] == product_id:
-            p.update(datos)
-            return p
-    return None
-
+def update_product(product_id: str, producto: dict):
+    try:
+        response = requests.put(f"{BASE_URL}/{product_id}", json=producto)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as err:
+        raise Exception(f"Error del servidor: {err.response.text}")
+    except Exception as e:
+        raise Exception(f"Error al actualizar: {e}")
 
 # ELIMINAR PRODUCTO
-def delete_product(product_id: int) -> bool:
-    for p in productos:
-        if p["id"] == product_id:
-            productos.remove(p)
-            return True
-    return False
+def delete_product(product_id: str):
+    try:
+        response = requests.delete(f"{BASE_URL}/{product_id}")
+        response.raise_for_status()
+        # Suele devolver None o el dict del producto eliminado, dependiendo de tu backend
+        return True 
+    except Exception as e:
+        raise Exception(f"Error al eliminar: {e}")

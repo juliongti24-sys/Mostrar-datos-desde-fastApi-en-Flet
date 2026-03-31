@@ -2,6 +2,8 @@ import flet as ft
 from typing import Any
 from app.services.transacciones_api_productos import list_products
 from app.styles.estilos import Colors, Textos_estilos
+from app.views.nuevo_editar import formulario_nuevo_editar_producto #Se agrega la ventana de nuevo/editar
+
 
 
 def productos_view(page: ft.Page) -> ft.Control:
@@ -53,7 +55,7 @@ def productos_view(page: ft.Page) -> ft.Control:
     contenido = ft.Column(
         [
             total_text,
-            tabla
+            tabla, 
         ]
     )
 

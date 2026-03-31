@@ -12,11 +12,11 @@ def formulario_nuevo_editar_producto(page: ft. Page, on_submit, initial: dict | 
     # Campos
     # En el primer campo initial.get("name", "")
     # intenta recuperar de initial el valor del campo "name" sino lo encuentra regresa
-    name = ft. TextField(label="Nombre", value=initial.get("name", ""))
-    quantity = ft. TextField(label="Cantidad", value=str(initial.get("quantity", 0)))
-    ingreso_date = ft. TextField(label="Ingreso (YYYY-MM-DD)", value=initial.get("ingreso_date", ""))
-    min_stock = ft. TextField(label="Stock mínimo", value=str(initial.get("min_stock", 0)))
-    max_stock = ft. TextField(label="Stock máximo", value=str(initial.get("max_stock", 0)))
+    name = ft.TextField(label="Nombre", value=initial.get("name", ""))
+    quantity = ft.TextField(label="Cantidad", value=str(initial.get("quantity", 0)))
+    ingreso_date = ft.TextField(label="Ingreso (YYYY-MM-DD)", value=initial.get("ingreso_date", ""))
+    min_stock = ft.TextField(label="Stock mínimo", value=str(initial.get("min_stock", 0)))
+    max_stock = ft.TextField(label="Stock máximo", value=str(initial.get("max_stock", 0)))
 
     #Botones
 
@@ -66,4 +66,4 @@ def formulario_nuevo_editar_producto(page: ft. Page, on_submit, initial: dict | 
         # Función para abrir esta ventana
     def open_():
         page.show_dialog(dlg)
-        return dlg, open, close
+    return dlg, open_, close
